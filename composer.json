@@ -8,8 +8,7 @@
             "email": "me@rakibul-hasan.com"
         }
     ],
-    "minimum-stability": "stable",
-    "prefer-stable": true,
+    "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.0"
     },
