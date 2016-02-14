@@ -1,8 +1,8 @@
 <?php
 
-namespace CurlEasy;
+namespace CurlPacks;
 /**
- * @property CurlEasy[] $allCurl
+ * @property CurlOne[] $allCurl
  */
 class CurlMulti {
 
@@ -41,8 +41,8 @@ class CurlMulti {
     }
 
     private function populateResult() {
-        foreach ($this->allCurl as $id => $curlEasyObj) {
-            $c = $curlEasyObj->getInstance();
+        foreach ($this->allCurl as $id => $CurlOneObj) {
+            $c = $CurlOneObj->getInstance();
             
             $this->allCurl[$id]->executeFromMulti(curl_multi_getcontent($c));
             
@@ -58,9 +58,9 @@ class CurlMulti {
 
     /**
      * 
-     * @return CurlEasy[]
+     * @return CurlOne[]
      */
-    public function getAllCurlEasyObj() {
+    public function getAllCurlOneObj() {
         return $this->allCurl;
     }
 

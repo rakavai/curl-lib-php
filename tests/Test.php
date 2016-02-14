@@ -1,10 +1,10 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php'; // Autoload files using Composer autoload
-use CurlEasy\CurlStart;
+use CurlPacks\CurlOne;
 
 $url = "http://jsonplaceholder.typicode.com/posts/2";
 
-$curl=new CurlStart($url);
+$curl=new CurlOne($url);
 $curl->execute();
 
 echo "Status Code:\n";

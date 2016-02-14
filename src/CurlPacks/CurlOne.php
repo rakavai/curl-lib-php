@@ -1,7 +1,7 @@
 <?php
-namespace CurlEasy;
+namespace CurlPacks;
 
-class CurlStart {
+class CurlOne {
 
     public static $METHOD_POST = 'post';
     public static $METHOD_GET = 'get';
