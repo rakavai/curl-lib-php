@@ -1,6 +1,7 @@
 {
     "name": "rakibul-hasan/curl-packs",
     "description": "Curl wrapper object in php",
+    "version" : "1.0.0",
     "authors": [
         {
             "name": "Rakibul Hasan",
@@ -8,6 +9,7 @@
         }
     ],
     "minimum-stability": "stable",
+    "prefer-stable": true,
     "require": {
         "php": ">=5.3.0"
     },
