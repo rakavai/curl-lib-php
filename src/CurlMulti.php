@@ -1,6 +1,6 @@
 <?php
-namespace App\Lib;
-require_once 'CurlEasy.php';
+
+namespace CurlEasy;
 /**
  * @property CurlEasy[] $allCurl
  */

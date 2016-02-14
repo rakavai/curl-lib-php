@@ -1,7 +1,7 @@
 <?php
-namespace App\Lib;
+namespace CurlEasy;
 
-class CurlEasy {
+class CurlStart {
 
     public static $METHOD_POST = 'post';
     public static $METHOD_GET = 'get';
