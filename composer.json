@@ -4,7 +4,6 @@
     "keywords": ["dot", "curl","http"],
     "homepage": "https://github.com/rakavai/curl-lib-php",
     "version" : "1.0.0",
-	"license": "MIT",
     "authors": [
         {
             "name": "Rakibul Hasan",
