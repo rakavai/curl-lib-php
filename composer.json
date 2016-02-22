@@ -1,5 +1,5 @@
 {
-    "name": "rakavai/curl-packs",
+    "name": "curl/curl-packs",
     "description": "Curl wrapper object in php",
     "keywords": ["dot", "curl","http"],
     "homepage": "https://github.com/rakavai/curl-lib-php",
