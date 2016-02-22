@@ -35,3 +35,18 @@ $ccurl->setHeader("Cache-Control: max-age=0");
 $resposeBody = $curl->getBody();
 $resposeCookies=$curl->getCookiesWithKey() //Get all cookeis in array with key value
 ```
+
+
+##For multi executable curl 
+```php
+
+$allCurl = array();
+for ($index = 0; $index < 10; $index++) {
+  $allCurl[] = new CurlOne("example.com")->setPostMethod();
+}
+$multiCurl = new CurlMulti($allCurl);
+$multiCurl->executeAllCurlObject();
+foreach ($multiCurl->getAllCurlOneObj() as $key => $aCurl) {
+  echo $aCurl->getWholeData().'\n'; //any CurlOne method
+}
+```
