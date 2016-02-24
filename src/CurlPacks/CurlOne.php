@@ -189,7 +189,7 @@ class CurlOne
         $querySTR = '';
         foreach ($this->data as $eachData) {
             foreach ($eachData as $variable => $value) {
-                $querySTR .= $variable . "=" . $value . "&";
+                $querySTR .= $variable . "=" . urlencode($value) . "&";
             }
         }
         $querySTR = rtrim($querySTR, "&");
@@ -200,10 +200,11 @@ class CurlOne
     {
         curl_setopt($this->curlResource, CURLOPT_HTTPGET, TRUE);
         $urlParsed = parse_url($this->url);
-        if (isset($urlParsed['query'])) {
-            $url = $this->url . "&" . $this->getQueryStr();
+        $queryToSet=$this->getQueryStr();
+        if (isset($urlParsed['query'])&&$queryToSet!="") {
+            $url = $this->url . "&" . $queryToSet;
         } else {
-            $url = $this->url . "?" . $this->getQueryStr();
+            $url = $this->url . "?" . $queryToSet;
         }
         curl_setopt($this->curlResource, CURLOPT_URL, $url);
     }
