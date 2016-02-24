@@ -24,6 +24,9 @@ if ($type == "s") {
     $curl = new CurlOne($url);
     $curl->execute();
 
+
+    
+
     echo "Status Code:\n";
     echo $curl->getStatusCode();
     echo "\n--------------------------------------\n";

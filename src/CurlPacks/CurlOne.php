@@ -1,7 +1,8 @@
 <?php
 namespace CurlPacks;
 
-class CurlOne {
+class CurlOne
+{
 
     public static $METHOD_POST = 'post';
     public static $METHOD_GET = 'get';
@@ -25,17 +26,20 @@ class CurlOne {
     private $callOnce = false;
     private $proxyStr = NULL;
 
-    public function __construct($url) {
+    public function __construct($url)
+    {
         $this->url = $url;
         $this->method = self::$METHOD_GET;
         $this->curlResource = curl_init();
     }
 
-    public function reInitCurl() {
+    public function reInitCurl()
+    {
         $this->curlResource = curl_init();
     }
 
-    public function getInstance() {
+    public function getInstance()
+    {
         if ($this->callOnce == FALSE) {
             $this->populateInfo();
             $this->callOnce = TRUE;
@@ -43,16 +47,19 @@ class CurlOne {
         return $this->curlResource;
     }
 
-    public function setUrl($url) {
+    public function setUrl($url)
+    {
         $this->url = $url;
     }
 
-    public function setReferer($referer) {
+    public function setReferer($referer)
+    {
         curl_setopt($this->curlResource, CURLOPT_REFERER, $referer);
         return $this;
     }
 
-    public function setCookies($key, $value = NULL) {
+    public function setCookies($key, $value = NULL)
+    {
         if ($value != NULL) {
             $this->setCookies($key . "=" . $value);
             return $this;
@@ -66,7 +73,8 @@ class CurlOne {
         return $this;
     }
 
-    public function setHeader($header) {
+    public function setHeader($header)
+    {
         if (is_array($header)) {
             $this->header = array_merge($this->header, $header);
             return $this;
@@ -76,7 +84,8 @@ class CurlOne {
         return $this;
     }
 
-    public function setData($data, $value = null) {
+    public function setData($data, $value = null)
+    {
         if ($value !== null) {
             $this->data[] = array(
                 $data => $value
@@ -87,18 +96,21 @@ class CurlOne {
         return $this;
     }
 
-    public function setDataWithKeyValue($array = array()) {
+    public function setDataWithKeyValue($array = array())
+    {
         foreach ($array as $key => $value) {
             $this->setData($key, $value);
         }
         return $this;
     }
 
-    public function setMethod($method) {
+    public function setMethod($method)
+    {
         $this->method = $method;
     }
 
-    public function setProxy($ip, $port = NULL) {
+    public function setProxy($ip, $port = NULL)
+    {
         $proxyStr = $ip;
         if ($port != NULL) {
             $proxyStr = $ip . ":" . $port;
@@ -107,40 +119,47 @@ class CurlOne {
         return $this;
     }
 
-    public function setPostMethod() {
+    public function setPostMethod()
+    {
         $this->setMethod(self::$METHOD_POST);
         return $this;
     }
 
-    public function setGetMethod() {
+    public function setGetMethod()
+    {
         $this->setMethod(self::$METHOD_GET);
         return $this;
     }
 
-    public function setOption($option, $value) {
+    public function setOption($option, $value)
+    {
         $this->options[] = array(
             $option => $value
         );
         return $this;
     }
 
-    public function setBasicAuth($user, $password) {
+    public function setBasicAuth($user, $password)
+    {
         $this->options[] = array(CURLOPT_HTTPAUTH => CURLAUTH_BASIC);
         $this->options[] = array(CURLOPT_USERPWD => "$user:$password");
         return this;
     }
 
-    public function deactivateSslVerification() {
+    public function deactivateSslVerification()
+    {
         $this->options[] = array(CURLOPT_SSL_VERIFYPEER => false);
         $this->options[] = array(CURLOPT_SSL_VERIFYHOST => false);
         return $this;
     }
 
-    private function setOpt($option, $value) {
+    private function setOpt($option, $value)
+    {
         curl_setopt($this->curlResource, $option, $value);
     }
 
-    private function populateOption() {
+    private function populateOption()
+    {
         foreach ($this->options as $option) {
             foreach ($option as $opt => $value) {
                 $this->setOpt($opt, $value);
@@ -148,13 +167,15 @@ class CurlOne {
         }
     }
 
-    private function populateProxy() {
+    private function populateProxy()
+    {
         if ($this->proxyStr != NULL) {
             curl_setopt($this->curlResource, CURLOPT_PROXY, $this->proxyStr);
         }
     }
 
-    private function init_curl() {
+    private function init_curl()
+    {
 
         curl_setopt($this->curlResource, CURLOPT_URL, $this->url);
 
@@ -163,29 +184,39 @@ class CurlOne {
         curl_setopt($this->curlResource, CURLINFO_HEADER_OUT, TRUE);
     }
 
-    private function getQueryStr() {
+    private function getQueryStr()
+    {
         $querySTR = '';
         foreach ($this->data as $eachData) {
             foreach ($eachData as $variable => $value) {
-                $querySTR.=$variable . "=" . $value . "&";
+                $querySTR .= $variable . "=" . $value . "&";
             }
         }
         $querySTR = rtrim($querySTR, "&");
         return $querySTR;
     }
 
-    private function populateGet() {
+    private function populateGet()
+    {
         curl_setopt($this->curlResource, CURLOPT_HTTPGET, TRUE);
-        curl_setopt($this->curlResource, CURLOPT_URL, $this->url . "?" . $this->getQueryStr());
+        $urlParsed = parse_url($this->url);
+        if (isset($urlParsed['query'])) {
+            $url = $this->url . "&" . $this->getQueryStr();
+        } else {
+            $url = $this->url . "?" . $this->getQueryStr();
+        }
+        curl_setopt($this->curlResource, CURLOPT_URL, $url);
     }
 
-    private function populatePost() {
+    private function populatePost()
+    {
         $queryPost = $this->getQueryStr();
         curl_setopt($this->curlResource, CURLOPT_POST, TRUE);
         curl_setopt($this->curlResource, CURLOPT_POSTFIELDS, $queryPost);
     }
 
-    private function populateGetOrPost() {
+    private function populateGetOrPost()
+    {
         if ($this->method == self::$METHOD_GET) {
             $this->populateGet();
         } else if ($this->method == self::$METHOD_POST) {
@@ -193,14 +224,16 @@ class CurlOne {
         }
     }
 
-    private function populateHeader() {
+    private function populateHeader()
+    {
         foreach ($this->cookies as $cookie) {
             $this->header[] = "Cookie: " . $cookie;
         }
         curl_setopt($this->curlResource, CURLOPT_HTTPHEADER, $this->header);
     }
 
-    private function populateInfo() {
+    private function populateInfo()
+    {
         $this->init_curl();
         $this->populateGetOrPost();
         $this->populateHeader();
@@ -208,7 +241,8 @@ class CurlOne {
         $this->populateProxy();
     }
 
-    private function afterExecute() {
+    private function afterExecute()
+    {
         $this->requestHeader = curl_getinfo($this->curlResource, CURLINFO_HEADER_OUT);
         $this->responseHeaderLength = $header_len = curl_getinfo($this->curlResource, CURLINFO_HEADER_SIZE);
         $this->responseHeader = substr($this->executedData, 0, $this->responseHeaderLength);
@@ -217,7 +251,8 @@ class CurlOne {
         $this->contentType = curl_getinfo($this->curlResource, CURLINFO_CONTENT_TYPE);
     }
 
-    public function execute() {
+    public function execute()
+    {
 
         $this->populateInfo();
 
@@ -226,13 +261,15 @@ class CurlOne {
         $this->afterExecute();
     }
 
-    function executeFromMulti($content) {
-      
+    function executeFromMulti($content)
+    {
+
         $this->executedData = $content;
         $this->afterExecute();
     }
 
-    private function divideKeyAndValue($str) {
+    private function divideKeyAndValue($str)
+    {
 
         $keyValue = explode("=", $str, 2);
         $key = $keyValue[0];
@@ -241,7 +278,8 @@ class CurlOne {
         return array($key => $value);
     }
 
-    private function imageContent() {
+    private function imageContent()
+    {
         $valid_image_type = array();
         $valid_image_type['image/png'] = '';
         $valid_image_type['image/jpg'] = '';
@@ -257,7 +295,8 @@ class CurlOne {
         return $valid_image_type;
     }
 
-    public function is_image() {
+    public function is_image()
+    {
         $contentType = strtolower($this->getContentType());
         $imageContent = $this->imageContent();
         if (isset($imageContent[$contentType])) {
@@ -267,7 +306,8 @@ class CurlOne {
         return FALSE;
     }
 
-    private function treatCookies() {
+    private function treatCookies()
+    {
         preg_match_all('/^Set-Cookie:\s*([^;]*)/mi', $this->responseHeader, $matches);
         $this->allResponseCookies = $matches;
         $this->responseSetCookies = $matches[0];
@@ -278,40 +318,49 @@ class CurlOne {
         }
     }
 
-    public function getResponseHeader() {
+    public function getResponseHeader()
+    {
         return $this->responseHeader;
     }
 
-    public function getCookies() {
+    public function getCookies()
+    {
         return $this->refinedCookies;
     }
 
-    public function getCookiesWithKey() {
+    public function getCookiesWithKey()
+    {
         return $this->refinedCookiesWithKeyAndValue;
     }
 
-    public function getRequestHeader() {
+    public function getRequestHeader()
+    {
         return $this->requestHeader;
     }
 
-    public function getBody() {
+    public function getBody()
+    {
         return $this->body;
     }
 
-    public function getContentType() {
+    public function getContentType()
+    {
         return $this->contentType;
     }
 
-    public function getImageSrc() {
+    public function getImageSrc()
+    {
         $src = 'data: ' . $this->getContentType() . ';base64,' . base64_encode($this->getBody());
         return $src;
     }
 
-    public function getStatusCode() {
+    public function getStatusCode()
+    {
         return curl_getinfo($this->curlResource, CURLINFO_HTTP_CODE);
     }
 
-    public function getWholeData() {
+    public function getWholeData()
+    {
         return $this->executedData;
     }
 
