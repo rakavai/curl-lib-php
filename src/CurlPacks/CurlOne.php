@@ -201,10 +201,13 @@ class CurlOne
         curl_setopt($this->curlResource, CURLOPT_HTTPGET, TRUE);
         $urlParsed = parse_url($this->url);
         $queryToSet=$this->getQueryStr();
-        if (isset($urlParsed['query'])&&$queryToSet!="") {
-            $url = $this->url . "&" . $queryToSet;
-        } else {
-            $url = $this->url . "?" . $queryToSet;
+        $url = $this->url;
+        if($queryToSet!="") {
+            if (isset($urlParsed['query'])) {
+                $url = $this->url . "&" . $queryToSet;
+            } else {
+                $url = $this->url . "?" . $queryToSet;
+            }
         }
         curl_setopt($this->curlResource, CURLOPT_URL, $url);
     }
